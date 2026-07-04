@@ -1,6 +1,7 @@
 import { useScrollAnimation } from "../hooks/useScrollAnimation";
 import { useScrollAnimationGroup } from "../hooks/useScrollAnimationGroup";
 import { useParallax } from "../hooks/useParallax";
+import { assets } from "../assets/assets";
 
 const schools = [
   {
@@ -8,14 +9,14 @@ const schools = [
     code: "SB.01",
     title: "School of Business",
     desc: "Practical, NITA-accredited courses for entrepreneurs and professionals building commercial skill.",
-    img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1200&q=80",
+    img: assets.sl5,
   },
   {
     id: "leadership",
     code: "SB.02",
     title: "School of Leadership & Management",
     desc: "Supervisory, strategic, and administrative programs for people stepping into management.",
-    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&q=80",
+    img: assets.sl7,
   },
 ];
 

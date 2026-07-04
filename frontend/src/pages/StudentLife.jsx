@@ -1,5 +1,6 @@
 import { useState } from "react";
-import { ArrowRight, ExternalLink } from "lucide-react";
+import { ArrowRight, Video, Users2 } from "lucide-react";
+import { assets } from "../assets/assets";
 
 const CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@400;500;600;700&display=swap');
@@ -7,10 +8,6 @@ const CSS = `
   @keyframes fadeUp {
     from { opacity: 0; transform: translateY(30px); }
     to   { opacity: 1; transform: translateY(0); }
-  }
-  @keyframes slideIn {
-    from { opacity: 0; transform: translateX(-24px); }
-    to   { opacity: 1; transform: translateX(0); }
   }
 
   *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -31,7 +28,7 @@ const CSS = `
   .sl-hero img {
     position: absolute; inset: 0;
     width: 100%; height: 100%;
-    object-fit: cover; object-position: center 35%;
+    object-fit: cover; object-position: center 30%;
     opacity: 0.55;
   }
   .sl-hero-scrim {
@@ -85,6 +82,60 @@ const CSS = `
   .sl-tab:hover { color: #111184; }
   .sl-tab.active { color: #111184; border-bottom-color: #FACC15; }
 
+  /* ── HYBRID BAND (Google Meet + physical on request) ── */
+  .sl-hybrid {
+    max-width: 1100px; margin: 0 auto;
+    padding: 72px 48px;
+  }
+  .sl-hybrid-eye {
+    font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: #6366f1; margin-bottom: 14px; text-align: center;
+  }
+  .sl-hybrid h2 {
+    font-family: 'Tenor Sans', serif;
+    font-size: clamp(1.8rem, 3.4vw, 2.6rem);
+    font-weight: 400; color: #0f1a5c;
+    line-height: 1.15; text-align: center;
+    margin: 0 auto 48px; max-width: 620px;
+  }
+  .sl-hybrid-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+  }
+  .sl-hybrid-card {
+    border-radius: 0;
+    border: 1px solid #dde3f5;
+    padding: 32px 30px;
+    background: #f8f9ff;
+  }
+  .sl-hybrid-card.on { background: #111184; border-color: #111184; }
+  .sl-hybrid-icon {
+    width: 44px; height: 44px; border-radius: 0;
+    background: #FACC15;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 20px;
+  }
+  .sl-hybrid-card.on .sl-hybrid-icon { background: rgba(250,204,21,0.9); }
+  .sl-hybrid-tag {
+    font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 0.14em; text-transform: uppercase;
+    color: #6366f1; margin-bottom: 10px;
+  }
+  .sl-hybrid-card.on .sl-hybrid-tag { color: rgba(250,204,21,0.85); }
+  .sl-hybrid-card h3 {
+    font-family: 'Tenor Sans', serif;
+    font-size: 1.3rem; font-weight: 400;
+    color: #0f1a5c; margin-bottom: 12px;
+  }
+  .sl-hybrid-card.on h3 { color: #fff; }
+  .sl-hybrid-card p {
+    font-size: 0.86rem; line-height: 1.75;
+    color: #4b5a8a;
+  }
+  .sl-hybrid-card.on p { color: rgba(255,255,255,0.65); }
+
   /* ── SPLIT SECTION ── */
   .sl-split {
     display: grid;
@@ -106,6 +157,14 @@ const CSS = `
   .sl-split:hover .sl-split-img img {
     transform: scale(1.04);
   }
+  .sl-split-img-cap {
+    position: absolute; bottom: 16px; left: 16px;
+    background: rgba(8,10,72,0.75);
+    color: rgba(255,255,255,0.85);
+    font-size: 0.66rem; font-weight: 600;
+    letter-spacing: 0.04em;
+    padding: 7px 14px; border-radius: 0;
+  }
 
   .sl-split-body {
     display: flex; flex-direction: column;
@@ -114,7 +173,6 @@ const CSS = `
   }
   .sl-split-body.gold { background: #FACC15; }
   .sl-split-body.navy { background: #0b1060; }
-  .sl-split-body.cream { background: #f8f6f0; }
   .sl-split-body.slate { background: #eef2ff; }
 
   .sl-split-eye {
@@ -143,7 +201,6 @@ const CSS = `
   }
   .sl-split-link:hover { gap: 13px; opacity: 0.75; }
 
-  /* color tokens per panel */
   .sl-split-body.gold .sl-split-eye  { color: #0b1060; }
   .sl-split-body.gold .sl-split-h2   { color: #0b1060; }
   .sl-split-body.gold .sl-split-p    { color: rgba(11,16,96,0.72); }
@@ -154,17 +211,12 @@ const CSS = `
   .sl-split-body.navy .sl-split-p    { color: rgba(255,255,255,0.6); }
   .sl-split-body.navy .sl-split-link { color: #FACC15; }
 
-  .sl-split-body.cream .sl-split-eye  { color: #6366f1; }
-  .sl-split-body.cream .sl-split-h2   { color: #0f1a5c; }
-  .sl-split-body.cream .sl-split-p    { color: #4b5a8a; }
-  .sl-split-body.cream .sl-split-link { color: #111184; }
-
   .sl-split-body.slate .sl-split-eye  { color: #6366f1; }
   .sl-split-body.slate .sl-split-h2   { color: #0f1a5c; }
   .sl-split-body.slate .sl-split-p    { color: #4b5a8a; }
   .sl-split-body.slate .sl-split-link { color: #111184; }
 
-  /* ── CLUBS STRIP ── */
+  /* ── PEER LEARNING CIRCLES STRIP ── */
   .sl-clubs {
     background: #0b1060;
     padding: 80px 48px;
@@ -179,7 +231,11 @@ const CSS = `
     font-family: 'Tenor Sans', serif;
     font-size: clamp(1.8rem, 3vw, 2.5rem);
     font-weight: 400; color: #fff;
-    margin-bottom: 48px; line-height: 1.12;
+    margin-bottom: 12px; line-height: 1.12;
+  }
+  .sl-clubs-sub {
+    font-size: 0.88rem; color: rgba(255,255,255,0.55);
+    max-width: 560px; line-height: 1.7; margin-bottom: 48px;
   }
   .sl-clubs-grid {
     display: grid;
@@ -187,7 +243,7 @@ const CSS = `
     gap: 20px;
   }
   .club-card {
-    border-radius: 20px; overflow: hidden;
+    border-radius: 0; overflow: hidden;
     position: relative; aspect-ratio: 3/4;
     cursor: default;
     transition: transform 300ms cubic-bezier(0.34,1.56,0.64,1);
@@ -244,7 +300,7 @@ const CSS = `
   .sl-cta a {
     display: inline-flex; align-items: center; gap: 9px;
     background: #0b1060; color: #fff;
-    padding: 15px 36px; border-radius: 12px;
+    padding: 15px 36px; border-radius: 0;
     font-size: 0.82rem; font-weight: 700;
     text-decoration: none; letter-spacing: 0.07em; text-transform: uppercase;
     transition: background 200ms, transform 200ms, box-shadow 200ms;
@@ -262,19 +318,20 @@ const CSS = `
     .sl-hero-content { padding: 0 32px 48px; }
     .sl-clubs-grid { grid-template-columns: 1fr; }
     .sl-tabs-inner { padding: 0 16px; }
+    .sl-hybrid { padding: 56px 20px; }
+    .sl-hybrid-grid { grid-template-columns: 1fr; }
   }
 `;
 
 const sections = [
-  { id: "health", label: "Health & Wellness" },
+  { id: "hybrid", label: "How Classes Work" },
   { id: "community", label: "Community" },
-  { id: "faith", label: "Faith & Wellbeing" },
   { id: "careers", label: "Career Growth" },
-  { id: "clubs", label: "Clubs" },
+  { id: "circles", label: "Peer Learning Circles" },
 ];
 
 export default function StudentLife() {
-  const [activeTab, setActiveTab] = useState("health");
+  const [activeTab, setActiveTab] = useState("hybrid");
 
   const scrollTo = (id) => {
     setActiveTab(id);
@@ -289,10 +346,7 @@ export default function StudentLife() {
       <div className="sl-page">
         {/* ── HERO ── */}
         <div className="sl-hero">
-          <img
-            src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=1600&q=80"
-            alt="Students laughing together on campus"
-          />
+          <img src={assets.sl1} alt="Students in a live facilitated session" />
           <div className="sl-hero-scrim" />
           <div className="sl-hero-content">
             <p className="sl-hero-eye">Student Life at Lebanon TTC</p>
@@ -302,9 +356,9 @@ export default function StudentLife() {
               the classroom
             </h1>
             <p>
-              Your time here isn't just about certificates. It's about who you
-              become — the connections, the growth, and the moments that stay
-              with you long after graduation.
+              Your time here isn't just about certificates. Learn live on Google
+              Meet from anywhere, or step into a physical room when you want to
+              — it's the connections and growth that stay with you.
             </p>
           </div>
         </div>
@@ -325,49 +379,55 @@ export default function StudentLife() {
         </div>
 
         {/* ══════════════════════════════════════════
-            HEALTH & WELLNESS — gold left, photo right
+            HOW CLASSES WORK — online-first, physical on request
         ══════════════════════════════════════════ */}
-        <div id="sl-health" className="sl-split">
-          <div className="sl-split-body gold">
-            <p className="sl-split-eye">Health & Wellness</p>
-            <h2 className="sl-split-h2">
-              Mind, body,
-              <br />
-              and soul
-            </h2>
-            <p className="sl-split-p">
-              Your wellbeing is the foundation of everything you do. Lebanon TTC
-              provides access to mental health support, fitness guidance, and
-              wellness workshops designed to help you thrive — not just survive
-              — through your studies and beyond.
-            </p>
-            <a href="/student-life/health" className="sl-split-link">
-              More Information <ArrowRight size={15} />
-            </a>
-          </div>
-          <div className="sl-split-img">
-            <img
-              src="https://images.unsplash.com/photo-1571019613454-1cb2f99b2d8b?w=900&q=80"
-              alt="Students in a wellness session"
-            />
+        <div id="sl-hybrid" className="sl-hybrid">
+          <p className="sl-hybrid-eye">How Classes Work</p>
+          <h2>Learn wherever you are — meet in person whenever you want to</h2>
+          <div className="sl-hybrid-grid">
+            <div className="sl-hybrid-card on">
+              <div className="sl-hybrid-icon">
+                <Video size={20} color="#0b1060" />
+              </div>
+              <p className="sl-hybrid-tag">Default</p>
+              <h3>Live on Google Meet</h3>
+              <p>
+                Every class runs live over Google Meet with your facilitator and
+                classmates, so you can join from anywhere in Kenya — without
+                disrupting your work or daily schedule.
+              </p>
+            </div>
+            <div className="sl-hybrid-card">
+              <div className="sl-hybrid-icon">
+                <Users2 size={20} color="#0b1060" />
+              </div>
+              <p className="sl-hybrid-tag">On Request</p>
+              <h3>Physical sessions, when you need them</h3>
+              <p>
+                Prefer to meet in person? Request a physical session at our
+                Kiritiri Town premises for mentorship, group work, or
+                presentation practice with your facilitator.
+              </p>
+            </div>
           </div>
         </div>
 
         {/* ══════════════════════════════════════════
-            COMMUNITY — photo left, navy right
+            COMMUNITY — real facilitator + student session
         ══════════════════════════════════════════ */}
         <div id="sl-community" className="sl-split flip">
           <div className="sl-split-body navy">
-            <p className="sl-split-eye">Community & Belonging</p>
+            <p className="sl-split-eye">Community & Mentorship</p>
             <h2 className="sl-split-h2">
-              A campus where
+              Small groups,
               <br />
-              everyone fits
+              real feedback
             </h2>
             <p className="sl-split-p">
-              From orientation week to graduation, our community events, peer
-              networks, and mentorship circles make sure no one walks this path
-              alone. Diverse backgrounds, one shared direction — forward.
+              Whether you're online or in the room, classes stay small enough
+              that your facilitator knows your name — and your work. Every
+              cohort gets direct mentorship, peer discussion, and guidance
+              tailored to where you're headed next.
             </p>
             <a href="/student-life/community" className="sl-split-link">
               Meet the Community <ArrowRight size={15} />
@@ -375,45 +435,19 @@ export default function StudentLife() {
           </div>
           <div className="sl-split-img">
             <img
-              src="https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=900&q=80"
-              alt="Students gathered in community discussion"
+              src={assets.sl2}
+              alt="Facilitator mentoring students around a table"
             />
+            <span className="sl-split-img-cap">
+              A live mentorship session at LTTC
+            </span>
           </div>
         </div>
 
         {/* ══════════════════════════════════════════
-            FAITH & WELLBEING — cream left, photo right
+            CAREER GROWTH — real presentation photo
         ══════════════════════════════════════════ */}
-        <div id="sl-faith" className="sl-split">
-          <div className="sl-split-body cream">
-            <p className="sl-split-eye">Faith & Spiritual Wellbeing</p>
-            <h2 className="sl-split-h2">
-              Grounded in
-              <br />
-              purpose
-            </h2>
-            <p className="sl-split-p">
-              We honour the whole person. Spiritual reflection spaces,
-              multi-faith dialogue forums, and chaplaincy support are available
-              to all students regardless of background or belief — because inner
-              clarity shapes outer excellence.
-            </p>
-            <a href="/student-life/faith" className="sl-split-link">
-              Explore Spiritual Support <ArrowRight size={15} />
-            </a>
-          </div>
-          <div className="sl-split-img">
-            <img
-              src="https://images.unsplash.com/photo-1504052434569-70ad5836ab65?w=900&q=80"
-              alt="Students in quiet reflection"
-            />
-          </div>
-        </div>
-
-        {/* ══════════════════════════════════════════
-            CAREER GROWTH — photo left, slate right
-        ══════════════════════════════════════════ */}
-        <div id="sl-careers" className="sl-split flip">
+        <div id="sl-careers" className="sl-split">
           <div className="sl-split-body slate">
             <p className="sl-split-eye">Career & Professional Growth</p>
             <h2 className="sl-split-h2">
@@ -422,10 +456,10 @@ export default function StudentLife() {
               what's next
             </h2>
             <p className="sl-split-p">
-              CV workshops, mock interviews, LinkedIn clinics, and direct
-              connections to partner organisations. Our careers support doesn't
-              start at graduation — it starts day one, so you're ready long
-              before the moment comes.
+              You'll practice the skills employers actually ask for — presenting
+              under pressure, structuring an argument, thinking like a manager —
+              in live sessions on topics like Public Policy, PR & Communication,
+              and Project Management.
             </p>
             <a href="/student-life/careers" className="sl-split-link">
               Career Resources <ArrowRight size={15} />
@@ -433,68 +467,70 @@ export default function StudentLife() {
           </div>
           <div className="sl-split-img">
             <img
-              src="https://images.unsplash.com/photo-1521737604893-d14cc237f11d?w=900&q=80"
-              alt="Students in a career workshop"
+              src={assets.sl3}
+              alt="Student presenting to peers at a whiteboard"
             />
+            <span className="sl-split-img-cap">
+              Student-led session: Public Policy & Administration
+            </span>
           </div>
         </div>
 
         {/* ══════════════════════════════════════════
-            CLUBS — dark strip with 3 cards
+            PEER LEARNING CIRCLES — real topics, real students
         ══════════════════════════════════════════ */}
-        <div id="sl-clubs" className="sl-clubs">
+        <div id="sl-circles" className="sl-clubs">
           <div className="sl-clubs-inner">
-            <p className="sl-clubs-eye">Student Clubs</p>
-            <h2>
-              Find your people.
-              <br />
-              Find your edge.
-            </h2>
+            <p className="sl-clubs-eye">Peer Learning Circles</p>
+            <h2>Learn it, then teach it back.</h2>
+            <p className="sl-clubs-sub">
+              Every cohort runs peer-led sessions where students take a topic
+              from the whiteboard to the front of the room — building the exact
+              skills you'll need on the job.
+            </p>
             <div className="sl-clubs-grid">
-              {/* Club 1 — Toastmasters / Public Speaking */}
               <div className="club-card">
                 <img
-                  src="https://images.unsplash.com/photo-1475721027785-f74eccf877e2?w=700&q=75"
-                  alt="Public speaking club"
+                  src={assets.sl4}
+                  alt="Student presenting on PR and Communication"
                 />
                 <div className="club-card-body">
                   <p className="club-tag">Communication</p>
-                  <p className="club-name">Speakers &amp; Leaders Club</p>
+                  <p className="club-name">PR &amp; Communication Circle</p>
                   <p className="club-desc">
-                    Weekly debates, pitch nights, and storytelling sessions.
-                    Build the confidence to own any room.
+                    Brand reputation, crisis handling, and AI media tools —
+                    presented by students, for students.
                   </p>
                 </div>
               </div>
 
-              {/* Club 2 — Entrepreneurship */}
               <div className="club-card">
                 <img
-                  src="https://images.unsplash.com/photo-1556761175-4b46a572b786?w=700&q=75"
-                  alt="Entrepreneurship club"
+                  src={assets.sl5}
+                  alt="Student presenting on Public Policy and Administration"
                 />
                 <div className="club-card-body">
-                  <p className="club-tag">Innovation</p>
-                  <p className="club-name">Founders &amp; Builders Club</p>
+                  <p className="club-tag">Governance</p>
+                  <p className="club-name">Public Policy Circle</p>
                   <p className="club-desc">
-                    Business idea competitions, startup mentorship, and
-                    pitch-deck workshops for aspiring entrepreneurs.
+                    Planning, organizing, directing, and budgeting — the
+                    fundamentals of public administration, worked through
+                    together.
                   </p>
                 </div>
               </div>
 
-              {/* Club 3 — Data & Tech */}
               <div className="club-card">
                 <img
-                  src="https://images.unsplash.com/photo-1504384308090-c894fdcc538d?w=700&q=75"
-                  alt="Tech and data club"
+                  src={assets.sl6}
+                  alt="Students working through a project management session"
                 />
                 <div className="club-card-body">
-                  <p className="club-tag">Technology</p>
-                  <p className="club-name">Data &amp; Tech Society</p>
+                  <p className="club-tag">Management</p>
+                  <p className="club-name">Project Management Circle</p>
                   <p className="club-desc">
-                    Hackathons, data challenges, and peer learning sessions for
-                    students passionate about the digital frontier.
+                    Scope, budget, timeline, and stakeholders — walked through
+                    on the whiteboard, then applied to a real case.
                   </p>
                 </div>
               </div>
@@ -506,8 +542,8 @@ export default function StudentLife() {
         <div className="sl-cta">
           <h2>Ready to be part of it?</h2>
           <p>
-            Apply today and step into a community that invests in every
-            dimension of your growth.
+            Apply today — join live on Google Meet, or request a physical
+            session with us in Kiritiri Town.
           </p>
           <a href="/apply">
             Apply Now <ArrowRight size={15} />

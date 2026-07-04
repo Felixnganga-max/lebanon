@@ -10,6 +10,7 @@ import {
 } from "lucide-react";
 import { assets } from "../assets/assets";
 import useApplications from "../hooks/useApplications";
+import { slugify } from "../data/slugify";
 
 const GLOBAL_CSS = `
   @import url('https://fonts.googleapis.com/css2?family=Tenor+Sans&family=Inter:wght@400;500;600;700&display=swap');
@@ -410,7 +411,7 @@ const categories = [
   {
     id: "digital",
     label: "School of Digital & Technology",
-    img: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1600&q=80",
+    img: assets.hero4,
     span: { col: 2, row: 2 },
     programs: [
       "Advanced Digital Marketing",
@@ -435,7 +436,7 @@ const categories = [
   {
     id: "leadership",
     label: "School of Leadership & Management",
-    img: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&q=80",
+    img: assets.sl5,
     span: { col: 1, row: 2 },
     programs: [
       "Leadership & Management",
@@ -466,7 +467,7 @@ const categories = [
   {
     id: "ngo",
     label: "School of NGO & Development",
-    img: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1200&q=80",
+    img: assets.s8,
     span: { col: 1, row: 1 },
     programs: [
       "Resource Mobilization & Proposal Writing",
@@ -487,7 +488,7 @@ const categories = [
   {
     id: "business",
     label: "School of Business",
-    img: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1600&q=80",
+    img: assets.bs,
     span: { col: 2, row: 1 },
     programs: [
       "Entrepreneurship & Business Growth",
@@ -500,7 +501,7 @@ const categories = [
   {
     id: "specialized",
     label: "School of Specialized Studies",
-    img: "https://images.unsplash.com/photo-1532094349884-543559072ec2?w=1200&q=80",
+    img: assets.ds,
     span: { col: 1, row: 2 },
     programs: [
       "Quantum GIS (QGIS)",
@@ -602,6 +603,11 @@ export default function Apply() {
 
   const previewRef = useRef(null);
   const courseRef = useRef(null);
+  const contentRef = useRef(null);
+  // Tracks whether this mount is a "jump straight to the form" landing —
+  // i.e. someone arrived here from a program's Apply Now link with a
+  // school/program already selected via router state.
+  const isPrefillLandingRef = useRef(!!prefill);
 
   const cat = categories.find((c) => c.id === selectedCat);
   const onChange = (e) => setForm({ ...form, [e.target.name]: e.target.value });
@@ -633,9 +639,21 @@ export default function Apply() {
     if (ok) setSubmitted(true);
   };
 
-  // Every time the step changes (including reaching the final review/success
-  // screen) bring the user back to the top of the page.
+  // On every ordinary step change, bring the user back to the top of the
+  // page. The one exception is the very first render when someone has
+  // landed here with a program already prefilled — there, we skip the
+  // hero entirely and scroll straight to where the form begins instead.
   useEffect(() => {
+    if (isPrefillLandingRef.current) {
+      isPrefillLandingRef.current = false;
+      const t = setTimeout(() => {
+        contentRef.current?.scrollIntoView({
+          behavior: "smooth",
+          block: "start",
+        });
+      }, 60);
+      return () => clearTimeout(t);
+    }
     window.scrollTo({ top: 0, behavior: "smooth" });
   }, [step, submitted]);
 
@@ -886,7 +904,10 @@ export default function Apply() {
         </div>
 
         {/* ══ CONTENT ══ */}
-        <div className={`content-wrap${step === 0 ? " step0" : ""}`}>
+        <div
+          ref={contentRef}
+          className={`content-wrap${step === 0 ? " step0" : ""}`}
+        >
           {/* ── STEP 0: Choose School (full-bleed editorial masonry) ── */}
           {step === 0 && (
             <div
@@ -1111,7 +1132,7 @@ export default function Apply() {
                       }}
                     >
                       <a
-                        href={`/programs/${cat.id}`}
+                        href={`/programs/${cat.id}/${slugify(selectedProg)}`}
                         target="_blank"
                         rel="noreferrer"
                         style={{
@@ -1140,7 +1161,7 @@ export default function Apply() {
                         <BookOpen size={14} /> Explore Program Details
                       </a>
                       <a
-                        href={`/programs/${cat.id}#curriculum`}
+                        href={`/programs/${cat.id}/${slugify(selectedProg)}#curriculum`}
                         target="_blank"
                         rel="noreferrer"
                         style={{
@@ -1439,23 +1460,25 @@ export default function Apply() {
                   >
                     {cat?.label}
                   </p>
-                  <a
-                    href={`/programs/${cat?.id}`}
-                    target="_blank"
-                    rel="noreferrer"
-                    style={{
-                      display: "inline-flex",
-                      alignItems: "center",
-                      gap: 5,
-                      color: "rgba(250,204,21,0.75)",
-                      fontSize: "0.72rem",
-                      fontWeight: 600,
-                      textDecoration: "none",
-                    }}
-                  >
-                    <BookOpen size={12} /> View full program details{" "}
-                    <ExternalLink size={11} />
-                  </a>
+                  {cat && selectedProg && (
+                    <a
+                      href={`/programs/${cat.id}/${slugify(selectedProg)}`}
+                      target="_blank"
+                      rel="noreferrer"
+                      style={{
+                        display: "inline-flex",
+                        alignItems: "center",
+                        gap: 5,
+                        color: "rgba(250,204,21,0.75)",
+                        fontSize: "0.72rem",
+                        fontWeight: 600,
+                        textDecoration: "none",
+                      }}
+                    >
+                      <BookOpen size={12} /> View full program details{" "}
+                      <ExternalLink size={11} />
+                    </a>
+                  )}
                 </div>
               </div>
 

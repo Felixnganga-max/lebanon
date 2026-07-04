@@ -1,3 +1,5 @@
+import { assets } from "../assets/assets";
+
 export const categories = [
   "All",
   "Programmes",
@@ -19,7 +21,7 @@ export const news = [
     date: "June 18, 2026",
     readTime: "5 min read",
     featured: true,
-    hero: "https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80",
+    hero: assets.ex,
     images: [
       "https://images.unsplash.com/photo-1552664730-d307ca884978?w=900&q=80",
       "https://images.unsplash.com/photo-1560472355-536de3962603?w=900&q=80",
@@ -81,7 +83,7 @@ export const news = [
     date: "June 10, 2026",
     readTime: "6 min read",
     featured: true,
-    hero: "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=1200&q=80",
+    hero: assets.pm,
     images: [
       "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=900&q=80",
       "https://images.unsplash.com/photo-1556761175-4b46a572b786?w=900&q=80",
@@ -138,7 +140,7 @@ export const news = [
     date: "June 5, 2026",
     readTime: "4 min read",
     featured: false,
-    hero: "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=1200&q=80",
+    hero: assets.spss,
     images: [
       "https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=900&q=80",
       "https://images.unsplash.com/photo-1504868584819-f8e8b4b6d7e3?w=900&q=80",
@@ -188,7 +190,7 @@ export const news = [
     date: "May 28, 2026",
     readTime: "5 min read",
     featured: true,
-    hero: "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=1200&q=80",
+    hero: assets.s9,
     images: [
       "https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=900&q=80",
       "https://images.unsplash.com/photo-1531545514256-b1400bc00f31?w=900&q=80",
@@ -247,7 +249,7 @@ export const news = [
     date: "May 20, 2026",
     readTime: "4 min read",
     featured: false,
-    hero: "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=1200&q=80",
+    hero: assets.os,
     images: [
       "https://images.unsplash.com/photo-1488521787991-ed7bbaae773c?w=900&q=80",
       "https://images.unsplash.com/photo-1509099836639-18ba1795216d?w=900&q=80",
@@ -297,7 +299,7 @@ export const news = [
     date: "May 14, 2026",
     readTime: "4 min read",
     featured: false,
-    hero: "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=1200&q=80",
+    hero: assets.smm,
     images: [
       "https://images.unsplash.com/photo-1519389950473-47ba0277781c?w=900&q=80",
       "https://images.unsplash.com/photo-1432888498266-38ffec3eaf0a?w=900&q=80",
@@ -347,7 +349,7 @@ export const news = [
     date: "May 6, 2026",
     readTime: "5 min read",
     featured: false,
-    hero: "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=1200&q=80",
+    hero: assets.c,
     images: [
       "https://images.unsplash.com/photo-1434030216411-0b793f4b4173?w=900&q=80",
       "https://images.unsplash.com/photo-1543269664-56d93c1b41a6?w=900&q=80",
@@ -397,7 +399,7 @@ export const news = [
     date: "April 29, 2026",
     readTime: "3 min read",
     featured: false,
-    hero: "https://images.unsplash.com/photo-1573164713714-d95e436ab8d8?w=1200&q=80",
+    hero: assets.gbv,
     images: [
       "https://images.unsplash.com/photo-1573164713714-d95e436ab8d8?w=900&q=80",
       "https://images.unsplash.com/photo-1529390079861-591de354faf5?w=900&q=80",
@@ -448,7 +450,7 @@ export const news = [
     date: "April 20, 2026",
     readTime: "5 min read",
     featured: false,
-    hero: "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=1200&q=80",
+    hero: assets.gm,
     images: [
       "https://images.unsplash.com/photo-1450101499163-c8848c66ca85?w=900&q=80",
       "https://images.unsplash.com/photo-1563986768609-322da13575f3?w=900&q=80",
@@ -499,7 +501,7 @@ export const news = [
     date: "April 10, 2026",
     readTime: "4 min read",
     featured: false,
-    hero: "https://images.unsplash.com/photo-1532094349884-543559072ec2?w=1200&q=80",
+    hero: assets.q,
     images: [
       "https://images.unsplash.com/photo-1532094349884-543559072ec2?w=900&q=80",
       "https://images.unsplash.com/photo-1446776877081-d282a0f896e2?w=900&q=80",

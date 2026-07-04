@@ -64,12 +64,99 @@ export default function Contact() {
         paddingTop: "80px",
       }}
     >
+      {/* ── RESPONSIVE STYLES ── */}
+      <style>{`
+        .ltc-hero-band {
+          padding: 56px 48px 48px;
+        }
+        .ltc-main-grid {
+          padding: 48px 48px 80px;
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 40px;
+          align-items: start;
+        }
+        .ltc-form-card {
+          padding: 36px 40px;
+        }
+        .ltc-name-grid {
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          gap: 12px;
+        }
+        .ltc-phone-row {
+          display: flex;
+          gap: 10px;
+        }
+        .ltc-faq-band {
+          padding: 64px 48px 80px;
+        }
+        .ltc-faq-grid {
+          max-width: 1200px;
+          margin: 0 auto;
+          display: grid;
+          grid-template-columns: 1fr 1.6fr;
+          gap: 64px;
+          align-items: start;
+        }
+        .ltc-faq-answer {
+          padding-right: 44px;
+        }
+        .ltc-map-frame {
+          height: 240px;
+        }
+
+        @media (max-width: 900px) {
+          .ltc-main-grid {
+            grid-template-columns: 1fr;
+            gap: 32px;
+          }
+          .ltc-faq-grid {
+            grid-template-columns: 1fr;
+            gap: 32px;
+          }
+        }
+
+        @media (max-width: 640px) {
+          .ltc-hero-band {
+            padding: 40px 20px 32px;
+          }
+          .ltc-main-grid {
+            padding: 32px 16px 56px;
+          }
+          .ltc-form-card {
+            padding: 28px 20px;
+          }
+          .ltc-name-grid {
+            grid-template-columns: 1fr;
+          }
+          .ltc-phone-row {
+            flex-wrap: wrap;
+          }
+          .ltc-faq-band {
+            padding: 48px 16px 56px;
+          }
+          .ltc-faq-answer {
+            padding-right: 0;
+          }
+          .ltc-map-frame {
+            height: 200px;
+          }
+        }
+
+        @media (max-width: 400px) {
+          .ltc-contact-info-card {
+            padding: 24px 20px !important;
+          }
+        }
+      `}</style>
+
       {/* ── HERO BAND ── */}
       <div
+        className="ltc-hero-band"
         style={{
           background: "#eef2ff",
           borderBottom: "1px solid #dde3f5",
-          padding: "56px 48px 48px",
         }}
       >
         <div style={{ maxWidth: "1200px", margin: "0 auto" }}>
@@ -114,20 +201,17 @@ export default function Contact() {
 
       {/* ── MAIN GRID ── */}
       <div
+        className="ltc-main-grid"
         style={{
           maxWidth: "1200px",
           margin: "0 auto",
-          padding: "48px 48px 80px",
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gap: "40px",
-          alignItems: "start",
         }}
       >
         {/* LEFT COL */}
         <div style={{ display: "flex", flexDirection: "column", gap: "32px" }}>
           {/* Contact details */}
           <div
+            className="ltc-contact-info-card"
             style={{
               background: "#eef2ff",
               borderRadius: "1.25rem",
@@ -335,6 +419,7 @@ export default function Contact() {
                       color: "#111184",
                       textDecoration: "none",
                       fontWeight: 500,
+                      wordBreak: "break-word",
                     }}
                   >
                     admissions@lebanonttc.co.ke
@@ -409,11 +494,11 @@ export default function Contact() {
             }}
           >
             <iframe
+              className="ltc-map-frame"
               title="Lebanon TTC Location"
               src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3988.5!2d37.6!3d-0.65!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x0%3A0x0!2zMC42NVMgMzcuNkU!5e0!3m2!1sen!2ske!4v1234567890"
               width="100%"
-              height="240"
-              style={{ border: 0, display: "block" }}
+              style={{ border: 0, display: "block", width: "100%" }}
               allowFullScreen=""
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
@@ -431,6 +516,7 @@ export default function Contact() {
                 display: "flex",
                 flexDirection: "column",
                 gap: "2px",
+                maxWidth: "calc(100% - 24px)",
               }}
             >
               <p
@@ -452,10 +538,10 @@ export default function Contact() {
 
         {/* RIGHT COL — form */}
         <div
+          className="ltc-form-card"
           style={{
             background: "white",
             borderRadius: "1.5rem",
-            padding: "36px 40px",
             border: "1px solid #dde3f5",
             boxShadow: "0 4px 32px rgba(17,17,132,0.06)",
           }}
@@ -523,13 +609,7 @@ export default function Contact() {
               onSubmit={handleSubmit}
               style={{ display: "flex", flexDirection: "column", gap: "16px" }}
             >
-              <div
-                style={{
-                  display: "grid",
-                  gridTemplateColumns: "1fr 1fr",
-                  gap: "12px",
-                }}
-              >
+              <div className="ltc-name-grid">
                 <input
                   name="firstName"
                   placeholder="First name"
@@ -578,7 +658,7 @@ export default function Contact() {
                   style={{ ...inputStyle, paddingLeft: "40px" }}
                 />
               </div>
-              <div style={{ display: "flex", gap: "10px" }}>
+              <div className="ltc-phone-row">
                 <div
                   style={{
                     ...inputStyle,
@@ -601,7 +681,7 @@ export default function Contact() {
                   placeholder="Phone number"
                   value={form.phone}
                   onChange={handleChange}
-                  style={{ ...inputStyle, flex: 1 }}
+                  style={{ ...inputStyle, flex: 1, minWidth: "140px" }}
                 />
               </div>
               <textarea
@@ -688,22 +768,13 @@ export default function Contact() {
 
       {/* ── FAQ SECTION ── */}
       <div
+        className="ltc-faq-band"
         style={{
           background: "#eef2ff",
           borderTop: "1px solid #dde3f5",
-          padding: "64px 48px 80px",
         }}
       >
-        <div
-          style={{
-            maxWidth: "1200px",
-            margin: "0 auto",
-            display: "grid",
-            gridTemplateColumns: "1fr 1.6fr",
-            gap: "64px",
-            alignItems: "start",
-          }}
-        >
+        <div className="ltc-faq-grid">
           {/* FAQ label */}
           <div>
             <p
@@ -757,10 +828,7 @@ export default function Contact() {
                   top: "50%",
                   transform: "translateY(-50%)",
                 }}
-              >
-                <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
-                <polyline points="22,6 12,13 2,6" />
-              </svg>
+              />
               <input
                 placeholder="Enter your email"
                 style={{
@@ -840,12 +908,12 @@ export default function Contact() {
                 </button>
                 {openIndex === i && (
                   <p
+                    className="ltc-faq-answer"
                     style={{
                       fontSize: "0.82rem",
                       color: "#5a6a9a",
                       lineHeight: 1.75,
                       margin: "0 0 20px 0",
-                      paddingRight: "44px",
                     }}
                   >
                     {faq.a}

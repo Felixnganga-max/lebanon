@@ -45,9 +45,21 @@ import ds from "./ds.png";
 import bs from "./bs.png";
 import yt from "./yt.png";
 import c from "./c.png";
+import sl1 from "./sl1.jpeg";
+import sl2 from "./sl2.jpeg";
+import sl3 from "./sl3.jpeg";
+import sl4 from "./sl4.jpeg";
+import sl5 from "./sl5.jpeg";
+import sl6 from "./sl6.jpeg";
+import sl7 from "./sl7.jpeg";
+import sl8 from "./sl8.jpeg";
+import sl9 from "./sl9.jpeg";
+import sl10 from "./sl10.jpeg";
+import sps from "./sps.png";
 
 export const assets = {
   hero,
+  sps,
   ds,
   c,
   yt,
@@ -94,4 +106,14 @@ export const assets = {
   wp,
   spss,
   ex,
+  sl1,
+  sl2,
+  sl3,
+  sl4,
+  sl5,
+  sl6,
+  sl7,
+  sl8,
+  sl9,
+  sl10,
 };

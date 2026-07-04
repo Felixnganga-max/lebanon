@@ -183,7 +183,7 @@ export default function CourseSearch() {
             value={query}
             onChange={(e) => setQuery(e.target.value)}
             placeholder="Search the catalogue — e.g. “proposal writing”"
-            className="w-full bg-white border border-[#dde3f5] rounded-full py-4 pl-12 pr-12 text-[15px] text-[#1e2a6e] placeholder:text-[#9aa5d4] outline-none shadow-[0_1px_2px_rgba(17,17,132,0.04)] focus:border-[#111184] focus:ring-4 focus:ring-[#111184]/10 transition"
+            className="w-full bg-white border border-[#dde3f5] py-4 pl-12 pr-12 text-[15px] text-[#1e2a6e] placeholder:text-[#9aa5d4] outline-none shadow-[0_1px_2px_rgba(17,17,132,0.04)] focus:border-[#111184] focus:ring-4 focus:ring-[#111184]/10 transition"
           />
           {query && (
             <button
@@ -201,7 +201,7 @@ export default function CourseSearch() {
           {/* School rail */}
           <aside
             ref={railRef}
-            className="bg-[#111184] rounded-2xl p-2.5 flex flex-row lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible scrollbar-hide lg:sticky lg:top-8 lg:self-start"
+            className="bg-[#111184] p-2.5 flex flex-row lg:flex-col gap-1.5 overflow-x-auto lg:overflow-visible scrollbar-hide lg:sticky lg:top-8 lg:self-start"
             style={{
               "--anim-tx": "-16px",
               "--anim-ty": "0px",
@@ -212,7 +212,7 @@ export default function CourseSearch() {
           >
             <button
               onClick={() => setActiveSchool(null)}
-              className="shrink-0 lg:shrink text-left px-4 py-3 rounded-xl text-sm font-semibold whitespace-nowrap transition-colors"
+              className="shrink-0 lg:shrink text-left px-4 py-3 text-sm font-semibold whitespace-nowrap transition-colors"
               style={{
                 background: !activeSchool ? "#FACC15" : "transparent",
                 color: !activeSchool ? "#111184" : "rgba(255,255,255,0.55)",
@@ -226,14 +226,14 @@ export default function CourseSearch() {
                 <button
                   key={s.id}
                   onClick={() => setActiveSchool(active ? null : s.id)}
-                  className="shrink-0 lg:shrink flex items-center gap-2.5 text-left px-4 py-3 rounded-xl text-sm font-semibold whitespace-nowrap transition-colors"
+                  className="shrink-0 lg:shrink flex items-center gap-2.5 text-left px-4 py-3 text-sm font-semibold whitespace-nowrap transition-colors"
                   style={{
                     background: active ? "#FACC15" : "transparent",
                     color: active ? "#111184" : "rgba(255,255,255,0.7)",
                   }}
                 >
                   <span
-                    className="text-[10px] font-bold tracking-wider px-1.5 py-0.5 rounded"
+                    className="text-[10px] font-bold tracking-wider px-1.5 py-0.5"
                     style={{
                       background: active
                         ? "rgba(17,17,132,0.12)"
@@ -261,7 +261,7 @@ export default function CourseSearch() {
 
             <div
               ref={rowsRef}
-              className="bg-white rounded-2xl border border-[#e4e7f5] overflow-hidden"
+              className="bg-white border border-[#e4e7f5] overflow-hidden"
             >
               {results.length === 0 ? (
                 <div className="px-6 py-16 text-center">
@@ -276,13 +276,13 @@ export default function CourseSearch() {
                 visibleResults.map((r) => (
                   <Link
                     key={r.code}
-                    to="/applications"
+                    to="/apply"
                     state={{ schoolId: r.schoolId, program: r.program }}
                     className="group flex items-center justify-between gap-4 px-5 sm:px-6 py-5 border-b border-[#eef0fa] last:border-0 hover:bg-[#f7f8ff] transition-colors"
                   >
                     <div className="flex items-center gap-4 sm:gap-5 min-w-0">
                       <span
-                        className="shrink-0 text-[11px] font-bold tracking-wider text-[#111184] bg-[#eef0fa] border border-[#dde3f5] rounded-md px-2 py-1"
+                        className="shrink-0 text-[11px] font-bold tracking-wider text-[#111184] bg-[#eef0fa] border border-[#dde3f5] px-2 py-1"
                         style={{ fontFamily: "ui-monospace, monospace" }}
                       >
                         {r.code}
@@ -309,7 +309,7 @@ export default function CourseSearch() {
               <div className="flex justify-center mt-6">
                 <button
                   onClick={() => setVisibleCount((c) => c + PAGE_SIZE)}
-                  className="group inline-flex items-center gap-2 bg-white border border-[#dde3f5] hover:border-[#111184] text-[#111184] font-semibold text-sm px-7 py-3.5 rounded-full shadow-[0_1px_2px_rgba(17,17,132,0.04)] hover:shadow-[0_8px_24px_rgba(17,17,132,0.12)] transition-all active:scale-95"
+                  className="group inline-flex items-center gap-2 bg-white border border-[#dde3f5] hover:border-[#111184] text-[#111184] font-semibold text-sm px-7 py-3.5 shadow-[0_1px_2px_rgba(17,17,132,0.04)] hover:shadow-[0_8px_24px_rgba(17,17,132,0.12)] transition-all active:scale-95"
                 >
                   Load more programs
                   <span className="text-[#9aa5d4] font-normal">
@@ -326,7 +326,7 @@ export default function CourseSearch() {
         </div>
 
         {/* ── CTA banner ── */}
-        <div className="mt-14 bg-[#0b1060] rounded-2xl px-8 py-10 sm:px-12 sm:py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
+        <div className="mt-14 bg-[#0b1060] px-8 py-10 sm:px-12 sm:py-12 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-6">
           <div>
             <p className="text-[11px] font-bold tracking-[0.2em] uppercase text-[#FACC15]/80 mb-3">
               Don't see your fit?
@@ -340,8 +340,8 @@ export default function CourseSearch() {
             </h3>
           </div>
           <Link
-            to="/applications"
-            className="shrink-0 inline-flex items-center gap-2 bg-[#dc2626] hover:bg-red-700 text-white font-bold px-8 py-4 rounded-xl shadow-lg active:scale-95 transition-all"
+            to="/apply"
+            className="shrink-0 inline-flex items-center gap-2 bg-[#dc2626] hover:bg-red-700 text-white font-bold px-8 py-4 shadow-lg active:scale-95 transition-all"
           >
             Start Application <ArrowUpRight size={17} />
           </Link>
