@@ -25,20 +25,29 @@ app.use(helmet());
 // package will only send back for an explicit origin — "*" is rejected
 // outright when credentials:true. Origins are configured via env since the
 // frontend (Hostinger) and backend (Vercel) are different domains/deploys.
+const stripTrailingSlash = (url) => url.replace(/\/+$/, "");
+
 const allowedOrigins = (
   process.env.ALLOWED_ORIGINS ||
   "http://localhost:5173,http://localhost:5174,https://lebanonttc.co.ke,https://www.lebanonttc.co.ke"
 )
   .split(",")
-  .map((origin) => origin.trim())
+  .map((origin) => stripTrailingSlash(origin.trim()))
   .filter(Boolean);
+
+console.log("[cors] allowed origins:", allowedOrigins);
 
 app.use(
   cors({
     origin(origin, callback) {
-      if (!origin || allowedOrigins.includes(origin)) {
+      if (!origin || allowedOrigins.includes(stripTrailingSlash(origin))) {
         return callback(null, true);
       }
+      // Logged so a rejected origin (typo, trailing slash, stale env var)
+      // is visible in Vercel's Runtime Logs instead of a silent CORS 500.
+      console.warn(
+        `[cors] rejected origin "${origin}" — allowed: ${allowedOrigins.join(", ")}`,
+      );
       return callback(new Error("Not allowed by CORS"));
     },
     credentials: true,
