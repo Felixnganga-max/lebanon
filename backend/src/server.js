@@ -25,7 +25,10 @@ app.use(helmet());
 // package will only send back for an explicit origin — "*" is rejected
 // outright when credentials:true. Origins are configured via env since the
 // frontend (Hostinger) and backend (Vercel) are different domains/deploys.
-const allowedOrigins = "http://localhost:5174"
+const allowedOrigins = (
+  process.env.ALLOWED_ORIGINS ||
+  "http://localhost:5173,http://localhost:5174,https://lebanonttc.co.ke,https://www.lebanonttc.co.ke"
+)
   .split(",")
   .map((origin) => origin.trim())
   .filter(Boolean);
