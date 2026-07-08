@@ -67,8 +67,17 @@ app.use("/api/programs", programRoutes); // → public list/detail + admin CRUD/
 
 app.use(errorHandler);
 
-const PORT = process.env.PORT || 5000;
+// Vercel's Node runtime imports this module and calls the default export
+// as the request handler on every invocation — it does NOT run app.listen().
+// Locally (node src/server.js / nodemon) there's no such caller, so we start
+// a real server for that case only. Connect to Mongo eagerly either way;
+// serverless functions are cold-started per invocation so the connection
+// needs to be (re)established outside the listen() branch.
+connectDB();
 
-connectDB().finally(() => {
+if (process.env.VERCEL !== "1") {
+  const PORT = process.env.PORT || 5000;
   app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-});
+}
+
+export default app;
