@@ -73,6 +73,7 @@ export const createDocument = catchAsync(async (req, res) => {
     filePublicId: result.public_id,
     fileName: req.file.originalname,
     fileType: req.file.mimetype,
+    resourceType: result.resource_type,
     uploadedBy: req.user.userId,
   };
   console.log("[createDocument] Document.create params:", documentParams);
@@ -95,13 +96,17 @@ export const createDocument = catchAsync(async (req, res) => {
 
 // DELETE /api/documents/:id — admin only, also removes the Cloudinary asset
 export const deleteDocument = catchAsync(async (req, res) => {
-  const document = await Document.findByIdAndDelete(req.params.id);
+  const document = await Document.findById(req.params.id);
 
   if (!document) {
     return sendError(res, 404, "Document not found.");
   }
 
-  await deleteAsset(document.filePublicId);
+  // Delete the Cloudinary asset before the DB record — if this throws, the
+  // document stays intact (and deletable again) instead of the DB record
+  // vanishing while an orphaned file leaks in Cloudinary forever.
+  await deleteAsset(document.filePublicId, document.resourceType);
+  await document.deleteOne();
 
   return sendSuccess(res, null, "Document deleted.");
 });

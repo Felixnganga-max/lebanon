@@ -4,7 +4,7 @@ import catchAsync from "../utils/catchAsync.js";
 import sendSuccess from "../utils/sendSuccess.js";
 import sendError from "../utils/sendError.js";
 import slugify, { uniqueSlug } from "../utils/slugify.js";
-import { uploadBuffer } from "../utils/cloudinary.js";
+import { uploadBuffer, deleteAsset } from "../utils/cloudinary.js";
 
 // Dynamic-list fields (Learning Outcomes / Curriculum / Career Paths) arrive
 // as a real array over JSON, but as a JSON-encoded string over multipart
@@ -185,4 +185,80 @@ export const reorderPrograms = catchAsync(async (req, res) => {
   );
 
   return sendSuccess(res, null, "Program order updated.");
+});
+
+// GET /api/programs/materials — public, flattens every active program's
+// course materials for the Downloads page.
+export const listAllMaterials = catchAsync(async (req, res) => {
+  const programs = await Program.find(
+    { isActive: true, "materials.0": { $exists: true } },
+    { title: 1, slug: 1, materials: 1 },
+  ).sort({ title: 1 });
+
+  const materials = programs.flatMap((program) =>
+    program.materials.map((material) => ({
+      programId: program._id,
+      programTitle: program.title,
+      programSlug: program.slug,
+      _id: material._id,
+      title: material.title,
+      fileUrl: material.fileUrl,
+      fileName: material.fileName,
+      fileType: material.fileType,
+      uploadedAt: material.uploadedAt,
+    })),
+  );
+
+  return sendSuccess(res, { materials });
+});
+
+// POST /api/programs/:id/materials — admin only, multipart upload
+export const addMaterial = catchAsync(async (req, res) => {
+  const program = await Program.findById(req.params.id);
+  if (!program) {
+    return sendError(res, 404, "Program not found.");
+  }
+
+  if (!req.file) {
+    return sendError(res, 400, "A file is required.");
+  }
+
+  const title = req.body.title || req.file.originalname;
+
+  const result = await uploadBuffer(req.file.buffer, {
+    folder: "lttc/materials",
+    resourceType: "auto",
+  });
+
+  program.materials.push({
+    title,
+    fileUrl: result.secure_url,
+    filePublicId: result.public_id,
+    fileName: req.file.originalname,
+    fileType: req.file.mimetype,
+    resourceType: result.resource_type,
+  });
+
+  await program.save();
+
+  return sendSuccess(res, { program }, "Course material uploaded.", 201);
+});
+
+// DELETE /api/programs/:id/materials/:materialId — admin only
+export const deleteMaterial = catchAsync(async (req, res) => {
+  const program = await Program.findById(req.params.id);
+  if (!program) {
+    return sendError(res, 404, "Program not found.");
+  }
+
+  const material = program.materials.id(req.params.materialId);
+  if (!material) {
+    return sendError(res, 404, "Course material not found.");
+  }
+
+  await deleteAsset(material.filePublicId, material.resourceType);
+  material.deleteOne();
+  await program.save();
+
+  return sendSuccess(res, { program }, "Course material deleted.");
 });

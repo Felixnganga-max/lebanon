@@ -6,8 +6,13 @@ import {
   logoutAllDevices,
   changePassword,
   getMe,
+  createStaff,
+  listStaff,
+  updateStaff,
+  deleteStaff,
 } from "../controllers/auth.controller.js";
 import protect from "../middleware/authenticate.js";
+import restrictTo from "../middleware/restrictTo.js";
 import authLimiter from "../middleware/rateLimit.js";
 
 const router = Router();
@@ -30,5 +35,21 @@ router.post("/admin/change-password", protect, authLimiter, changePassword);
 
 // GET /api/auth/admin/me
 router.get("/admin/me", protect, getMe);
+
+// Staff management — super_admin/admin only, so an editor can't create
+// more accounts or promote themselves.
+const staffOnly = [protect, restrictTo("super_admin", "admin")];
+
+// POST /api/auth/admin/staff
+router.post("/admin/staff", ...staffOnly, createStaff);
+
+// GET /api/auth/admin/staff
+router.get("/admin/staff", ...staffOnly, listStaff);
+
+// PATCH /api/auth/admin/staff/:id — body: { isActive?, role? }
+router.patch("/admin/staff/:id", ...staffOnly, updateStaff);
+
+// DELETE /api/auth/admin/staff/:id
+router.delete("/admin/staff/:id", ...staffOnly, deleteStaff);
 
 export default router;

@@ -20,6 +20,7 @@ function toProgramDataShape(program) {
     curriculum: program.curriculum,
     careerPaths: program.careerPaths,
     certification: program.certification,
+    materials: program.materials || [],
   };
   // Omit entirely when not set, matching how only a few source programs
   // carry a scheduled intake date — never default to an empty string.

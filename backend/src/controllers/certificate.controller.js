@@ -170,6 +170,16 @@ export const getCertificateQr = catchAsync(async (req, res) => {
   return res.redirect(certificate.qrCodeUrl);
 });
 
+// GET /api/certificates/qr/general — admin only, static QR to the
+// verify-certificate landing page (no serial number encoded — visitors
+// type their own serial in once they land there).
+export const getGeneralCertificateQr = catchAsync(async (req, res) => {
+  const verifyUrl = "https://lebanonttc.co.ke/verify-certificate";
+  const buffer = await QRCode.toBuffer(verifyUrl, { type: "png", width: 400 });
+  res.set("Content-Type", "image/png");
+  return res.send(buffer);
+});
+
 // DELETE /api/certificates/:id — admin only
 export const deleteCertificate = catchAsync(async (req, res) => {
   const certificate = await Certificate.findByIdAndDelete(req.params.id);

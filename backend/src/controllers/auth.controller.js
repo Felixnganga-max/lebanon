@@ -194,6 +194,103 @@ export const changePassword = catchAsync(async (req, res) => {
   return sendSuccess(res, { accessToken }, "Password changed successfully.");
 });
 
+// POST /api/auth/admin/staff — super_admin/admin only. Creates a new
+// dashboard user with role "editor" — same login flow and dashboard as
+// every other Admin, RBAC beyond "authenticated or not" is a later concern.
+export const createStaff = catchAsync(async (req, res) => {
+  const { name, email, password } = req.body;
+
+  if (!name || !email || !password) {
+    return sendError(res, 400, "Name, email, and password are required.");
+  }
+
+  if (password.length < 8) {
+    return sendError(res, 400, "Password must be at least 8 characters.");
+  }
+
+  const existing = await Admin.findOne({ email: email.toLowerCase() });
+  if (existing) {
+    return sendError(res, 409, "An account with that email already exists.");
+  }
+
+  const staff = await Admin.create({ name, email, password, role: "editor" });
+
+  return sendSuccess(
+    res,
+    {
+      staff: {
+        id: staff._id,
+        name: staff.name,
+        email: staff.email,
+        role: staff.role,
+        isActive: staff.isActive,
+      },
+    },
+    "Staff account created.",
+    201,
+  );
+});
+
+// GET /api/auth/admin/staff — super_admin/admin only
+export const listStaff = catchAsync(async (req, res) => {
+  const staff = await Admin.find().sort({ createdAt: -1 });
+  return sendSuccess(res, {
+    staff: staff.map((s) => ({
+      id: s._id,
+      name: s.name,
+      email: s.email,
+      role: s.role,
+      isActive: s.isActive,
+      createdAt: s.createdAt,
+    })),
+  });
+});
+
+// PATCH /api/auth/admin/staff/:id — super_admin/admin only
+// body: { isActive?, role? } — never changes the password (see change-password)
+export const updateStaff = catchAsync(async (req, res) => {
+  const { isActive, role } = req.body;
+
+  const staff = await Admin.findById(req.params.id);
+  if (!staff) {
+    return sendError(res, 404, "Staff account not found.");
+  }
+
+  if (String(staff._id) === String(req.user.userId) && isActive === false) {
+    return sendError(res, 400, "You can't deactivate your own account.");
+  }
+
+  if (isActive !== undefined) staff.isActive = isActive;
+  if (role !== undefined) {
+    if (!["super_admin", "admin", "editor"].includes(role)) {
+      return sendError(res, 400, "Invalid role.");
+    }
+    staff.role = role;
+  }
+
+  await staff.save();
+
+  return sendSuccess(
+    res,
+    { staff: { id: staff._id, name: staff.name, email: staff.email, role: staff.role, isActive: staff.isActive } },
+    "Staff account updated.",
+  );
+});
+
+// DELETE /api/auth/admin/staff/:id — super_admin/admin only
+export const deleteStaff = catchAsync(async (req, res) => {
+  if (String(req.params.id) === String(req.user.userId)) {
+    return sendError(res, 400, "You can't delete your own account.");
+  }
+
+  const staff = await Admin.findByIdAndDelete(req.params.id);
+  if (!staff) {
+    return sendError(res, 404, "Staff account not found.");
+  }
+
+  return sendSuccess(res, null, "Staff account deleted.");
+});
+
 export const getMe = catchAsync(async (req, res) => {
   const admin = await Admin.findById(req.user.userId);
 

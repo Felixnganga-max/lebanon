@@ -7,6 +7,7 @@ import {
   updateCertificate,
   deleteCertificate,
   getCertificateQr,
+  getGeneralCertificateQr,
 } from "../controllers/certificate.controller.js";
 import authenticate from "../middleware/authenticate.js";
 
@@ -31,6 +32,9 @@ router.put("/:id", updateCertificate);
 
 // DELETE /api/certificates/:id — admin, delete
 router.delete("/:id", deleteCertificate);
+
+// GET /api/certificates/qr/general — admin, static QR to /verify-certificate
+router.get("/qr/general", getGeneralCertificateQr);
 
 // GET /api/certificates/:id/qr — admin, generate/return cached QR image
 router.get("/:id/qr", getCertificateQr);

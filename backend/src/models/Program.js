@@ -25,6 +25,28 @@ const programSchema = new mongoose.Schema(
     dates: { type: String, trim: true },
     isActive: { type: Boolean, default: true },
     displayOrder: { type: Number, default: 0 },
+    // Course material PDFs/docs attached to this program — embedded rather
+    // than a separate collection since each material is owned entirely by
+    // one program and never queried independently of it (except the
+    // flattened public /materials listing, which just projects this array).
+    materials: {
+      type: [
+        {
+          title: { type: String, required: true, trim: true },
+          fileUrl: { type: String, required: true },
+          filePublicId: { type: String, required: true },
+          fileName: { type: String, required: true },
+          fileType: { type: String, required: true },
+          // Cloudinary's own classification of the uploaded asset (image |
+          // raw | video) — destroy() rejects "auto" (upload-only), so this
+          // must be captured from the upload response and reused verbatim
+          // when the material is deleted.
+          resourceType: { type: String, default: "image" },
+          uploadedAt: { type: Date, default: Date.now },
+        },
+      ],
+      default: [],
+    },
   },
   { timestamps: true },
 );

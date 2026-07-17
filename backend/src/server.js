@@ -11,6 +11,11 @@ import certificateRoutes from "./routes/certificate.routes.js";
 import documentRoutes from "./routes/document.routes.js";
 import categoryRoutes from "./routes/category.routes.js";
 import programRoutes from "./routes/program.routes.js";
+import postRoutes from "./routes/post.routes.js";
+import commentRoutes from "./routes/comment.routes.js";
+import studentAuthRoutes from "./routes/studentAuth.routes.js";
+import studentRoutes from "./routes/student.routes.js";
+import enrollmentRoutes from "./routes/enrollment.routes.js";
 import errorHandler from "./middleware/errorHandler.js";
 
 const app = express();
@@ -27,13 +32,11 @@ app.use(helmet());
 // frontend (Hostinger) and backend (Vercel) are different domains/deploys.
 const stripTrailingSlash = (url) => url.replace(/\/+$/, "");
 
-const allowedOrigins = (
-  process.env.ALLOWED_ORIGINS ||
+const allowedOrigins =
   "http://localhost:5173,http://localhost:5174,https://lebanonttc.co.ke,https://www.lebanonttc.co.ke"
-)
-  .split(",")
-  .map((origin) => stripTrailingSlash(origin.trim()))
-  .filter(Boolean);
+    .split(",")
+    .map((origin) => stripTrailingSlash(origin.trim()))
+    .filter(Boolean);
 
 console.log("[cors] allowed origins:", allowedOrigins);
 
@@ -64,6 +67,11 @@ app.use("/api/certificates", certificateRoutes); // → verify (public) + admin 
 app.use("/api/documents", documentRoutes); // → public list + admin upload/delete
 app.use("/api/categories", categoryRoutes); // → public list + admin CRUD
 app.use("/api/programs", programRoutes); // → public list/detail + admin CRUD/reorder
+app.use("/api/posts", postRoutes); // → public list/detail + comments + reactions + admin CRUD
+app.use("/api/comments", commentRoutes); // → admin-only moderation queue
+app.use("/api/auth/student", studentAuthRoutes); // → POST /login, /refresh, /logout, GET /me
+app.use("/api/students", studentRoutes); // → admin-only CRUD
+app.use("/api/enrollments", enrollmentRoutes); // → admin CRUD + GET /me (student-scoped)
 
 app.use(errorHandler);
 

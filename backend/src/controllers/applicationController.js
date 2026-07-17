@@ -3,13 +3,14 @@ import {
   applicationReceivedEmail,
   adminNotificationEmail,
 } from "../utils/mailer.js";
+import Application from "../models/Application.js";
 
 const ADMIN_EMAIL = process.env.SMTP_USER; // admissions@lebanonttc.co.ke
 
 /**
- * Handles a new student application submission.
- * No database is used — the application "record" lives entirely in the
- * two emails sent below: one confirmation to the applicant, one
+ * Handles a new student application submission. Persists the application
+ * to the database (so it's manageable from the admin dashboard) and sends
+ * the same two emails as before: one confirmation to the applicant, one
  * notification to the admissions inbox.
  */
 export async function submitApplication(req, res) {
@@ -76,6 +77,31 @@ export async function submitApplication(req, res) {
         replyTo: email,
       }),
     ]);
+
+    // Persisted after the emails succeed, and deliberately isolated in its
+    // own try/catch — the applicant's emails are the primary channel they
+    // already rely on, so a DB hiccup here shouldn't turn into a "please
+    // retry" response when their submission was, in fact, received.
+    try {
+      await Application.create({
+        firstName,
+        lastName,
+        email,
+        phone: `+254 ${phone}`,
+        idNumber,
+        county,
+        employer,
+        motivation,
+        heard,
+        school,
+        program,
+      });
+    } catch (dbErr) {
+      console.error(
+        "[applicationController] failed to persist application:",
+        dbErr.message,
+      );
+    }
 
     return res.status(201).json({
       success: true,
